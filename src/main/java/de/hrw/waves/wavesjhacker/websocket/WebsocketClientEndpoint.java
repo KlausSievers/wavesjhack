@@ -93,8 +93,4 @@ public class WebsocketClientEndpoint {
     this.userSession.getAsyncRemote().sendText(message);
   }
 
-  public static interface MessageHandler {
-
-    public void handleMessage(String message);
-  }
 }
