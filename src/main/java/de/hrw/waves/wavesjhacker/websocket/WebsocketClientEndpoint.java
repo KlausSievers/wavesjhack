@@ -37,11 +37,13 @@ public class WebsocketClientEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
 
+  private final MessageHandler messageHandler;
+  private final ObjectMapper mapper = new ObjectMapper();
   private Session userSession = null;
-  private MessageHandler messageHandler;
   private Timer timer = new Timer();
 
-  public WebsocketClientEndpoint(URI endpointURI) {
+  public WebsocketClientEndpoint(URI endpointURI, MessageHandler messageHandler) {
+    this.messageHandler = messageHandler;
     try {
       WebSocketContainer container = ContainerProvider.getWebSocketContainer();
       container.connectToServer(this, endpointURI);
@@ -72,6 +74,7 @@ public class WebsocketClientEndpoint {
   public void onClose(Session userSession, CloseReason reason) {
     LOGGER.info("Closed webosocket to {} because of ", userSession, reason);
     this.userSession = null;
+    System.exit(-666);
   }
 
   /**
@@ -81,26 +84,20 @@ public class WebsocketClientEndpoint {
    */
   @OnMessage
   public void onMessage(String message) {
-    LOGGER.info("Received webosocket to {}", userSession);
-    if (this.messageHandler != null) {
-      this.messageHandler.handleMessage(message);
+    LOGGER.info("Received message from session:{}, message:{}", userSession.getId(), message);
+    this.messageHandler.handleMessage(message);
+  }
+
+  public void sendMessage(WavesWsMessage wavesMessage) {
+    try {
+      String message = mapper.writeValueAsString(wavesMessage);
+      LOGGER.info("Send {}", message);
+      this.sendMessage(message);
+    } catch (JsonProcessingException ex) {
+      LOGGER.error("Failed to convert PING to json", ex);
     }
   }
 
-  /**
-   * register message handler
-   *
-   * @param msgHandler
-   */
-  public void addMessageHandler(MessageHandler msgHandler) {
-    this.messageHandler = msgHandler;
-  }
-
-  /**
-   * Send a message.
-   *
-   * @param message
-   */
   public void sendMessage(String message) {
     this.userSession.getAsyncRemote().sendText(message);
   }
@@ -116,14 +113,7 @@ public class WebsocketClientEndpoint {
 
     @Override
     public void run() {
-      ObjectMapper mapper = new ObjectMapper();
-      try {
-        String pingMessage = mapper.writeValueAsString(WavesWsMessage.PING);
-        LOGGER.info("Send {}", pingMessage);
-        client.sendMessage(pingMessage);
-      } catch (JsonProcessingException ex) {
-        LOGGER.error("Failed to convert PING to json", ex);
-      }
+      client.sendMessage(WavesWsMessage.PING);
     }
 
   }

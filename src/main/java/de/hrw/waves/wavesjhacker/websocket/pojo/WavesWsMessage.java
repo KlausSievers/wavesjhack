@@ -13,35 +13,38 @@
  */
 package de.hrw.waves.wavesjhacker.websocket.pojo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
 @Data
 public class WavesWsMessage {
 
-  public enum ReceivedType {
-    PONG,
-    UTX;
+  public enum Type {
+    PING("ping"),
+    PONG("pong"),
+    UTX("utx"),
+    SUBSCRIBE_UTX("subscribe utx");
+    private final String name;
 
-    public static ReceivedType cast(String type) {
-      if (type != null && !type.isEmpty()) {
-        for (ReceivedType value : ReceivedType.values()) {
-          if (value.toString().toLowerCase().equals(type.toLowerCase())) {
-            return value;
-          }
-        }
-      }
-      return null;
+    private Type(String name) {
+      this.name = name;
+    }
+
+    @JsonValue
+    public String getName() {
+      return name;
     }
   }
 
-  public static final WavesWsMessage PING = new WavesWsMessage("ping");
-  public static final WavesWsMessage SUBSCRIBE_UTX = new WavesWsMessage("subscribe utx");
+  public static final WavesWsMessage PING = new WavesWsMessage(Type.PING);
+  public static final WavesWsMessage SUBSCRIBE_UTX = new WavesWsMessage(Type.SUBSCRIBE_UTX);
 
   public WavesWsMessage() {
   }
 
-  public WavesWsMessage(String op) {
-    this.op = op;
+  public WavesWsMessage(Type type) {
+    this.op = type;
   }
-  private String op;
+
+  private Type op;
 }

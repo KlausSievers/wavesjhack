@@ -13,9 +13,9 @@
  */
 package de.hrw.waves.wavesjhacker.websocket;
 
-import de.hrw.waves.wavesjhacker.waves.pojo.UnconfirmedTransaction;
+import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsDataMessage;
 
 public interface UTXListener {
 
-  void onUtx(UnconfirmedTransaction tx);
+  void onUtx(WavesWsDataMessage message);
 }

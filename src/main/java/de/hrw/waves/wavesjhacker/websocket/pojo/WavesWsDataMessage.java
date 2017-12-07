@@ -13,10 +13,12 @@
  */
 package de.hrw.waves.wavesjhacker.websocket.pojo;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 @Data
 public class WavesWsDataMessage extends WavesWsMessage {
 
-  private Object msg;
+  private JsonNode msg;
+  private String status;
 }

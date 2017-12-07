@@ -13,8 +13,9 @@
  */
 package de.hrw.waves.wavesjhacker.websocket;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.hrw.waves.wavesjhacker.waves.pojo.UnconfirmedTransaction;
+import de.hrw.waves.wavesjhacker.waves.pojo.Transaction;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsDataMessage;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsMessage;
 import java.io.IOException;
@@ -38,20 +39,22 @@ public class WavesMessageHandler implements MessageHandler {
       LOGGER.error("Failed to parse message {}", message, ex);
     }
   }
-  
-  public void addUtxListener(UTXListener listener){
+
+  public void addUtxListener(UTXListener listener) {
     utxListener.add(listener);
   }
 
   private void handle(WavesWsDataMessage message) throws IOException {
     if (message != null) {
-      WavesWsMessage.ReceivedType type = WavesWsMessage.ReceivedType.cast(message.getOp());
-      switch (type) {
+      switch (message.getOp()) {
         case PONG:
           handlePong(message);
           break;
         case UTX:
           handleUtx(message);
+          break;
+        case SUBSCRIBE_UTX:
+          handleSubscribeUtx(message);
           break;
         default:
           LOGGER.warn("Type not supported", message);
@@ -62,12 +65,15 @@ public class WavesMessageHandler implements MessageHandler {
   }
 
   private void handlePong(WavesWsDataMessage message) {
-    LOGGER.warn("Received pong", message);
+    LOGGER.info("Received pong", message);
   }
 
   private void handleUtx(WavesWsDataMessage message) throws IOException {
-    LOGGER.warn("Received utx", message);
-    UnconfirmedTransaction tx = mapper.readValue(message.getMsg().toString(), UnconfirmedTransaction.class);
-    utxListener.forEach(o -> o.onUtx(tx));
+    LOGGER.info("Received utx", message);
+    utxListener.forEach(o -> o.onUtx(message));
+  }
+
+  private void handleSubscribeUtx(WavesWsDataMessage message) {
+    LOGGER.info("Subscribed {}", message);
   }
 }
