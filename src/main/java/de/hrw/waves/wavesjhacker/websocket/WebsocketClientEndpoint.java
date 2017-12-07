@@ -13,8 +13,13 @@
  */
 package de.hrw.waves.wavesjhacker.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsMessage;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -24,12 +29,17 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ClientEndpoint
 public class WebsocketClientEndpoint {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
+
   private Session userSession = null;
   private MessageHandler messageHandler;
+  private Timer timer = new Timer();
 
   public WebsocketClientEndpoint(URI endpointURI) {
     try {
@@ -47,8 +57,9 @@ public class WebsocketClientEndpoint {
    */
   @OnOpen
   public void onOpen(Session userSession) {
-    System.out.println("opening websocket");
+    LOGGER.info("Opened webosocket to {}", userSession);
     this.userSession = userSession;
+    timer.scheduleAtFixedRate(new Watchdog(this), 0, 30000);
   }
 
   /**
@@ -59,7 +70,7 @@ public class WebsocketClientEndpoint {
    */
   @OnClose
   public void onClose(Session userSession, CloseReason reason) {
-    System.out.println("closing websocket");
+    LOGGER.info("Closed webosocket to {} because of ", userSession, reason);
     this.userSession = null;
   }
 
@@ -70,6 +81,7 @@ public class WebsocketClientEndpoint {
    */
   @OnMessage
   public void onMessage(String message) {
+    LOGGER.info("Received webosocket to {}", userSession);
     if (this.messageHandler != null) {
       this.messageHandler.handleMessage(message);
     }
@@ -93,4 +105,26 @@ public class WebsocketClientEndpoint {
     this.userSession.getAsyncRemote().sendText(message);
   }
 
+  private static class Watchdog extends TimerTask {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Watchdog.class);
+    private final WebsocketClientEndpoint client;
+
+    public Watchdog(WebsocketClientEndpoint client) {
+      this.client = client;
+    }
+
+    @Override
+    public void run() {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
+        String pingMessage = mapper.writeValueAsString(WavesWsMessage.PING);
+        LOGGER.info("Send {}", pingMessage);
+        client.sendMessage(pingMessage);
+      } catch (JsonProcessingException ex) {
+        LOGGER.error("Failed to convert PING to json", ex);
+      }
+    }
+
+  }
 }

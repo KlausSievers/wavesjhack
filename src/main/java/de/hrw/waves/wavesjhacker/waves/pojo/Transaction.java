@@ -13,12 +13,13 @@
  */
 package de.hrw.waves.wavesjhacker.waves.pojo;
 
-import java.util.Objects;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
+@EqualsAndHashCode(of = {"type", "id", "sender", "senderPublicKey", "signature"})
 public class Transaction {
 
   private int type;

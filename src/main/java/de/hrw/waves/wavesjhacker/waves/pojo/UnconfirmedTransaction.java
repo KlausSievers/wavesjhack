@@ -14,7 +14,6 @@
 package de.hrw.waves.wavesjhacker.waves.pojo;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
