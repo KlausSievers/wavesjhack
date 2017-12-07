@@ -13,19 +13,29 @@
  */
 package de.hrw.waves.wavesjhacker.websocket;
 
+import java.io.IOException;
 import java.net.URI;
+import javax.websocket.ClientEndpoint;
+import javax.websocket.CloseReason;
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 
 @ClientEndpoint
 public class WebsocketClientEndpoint {
 
-  Session userSession = null;
+  private Session userSession = null;
   private MessageHandler messageHandler;
 
   public WebsocketClientEndpoint(URI endpointURI) {
     try {
       WebSocketContainer container = ContainerProvider.getWebSocketContainer();
       container.connectToServer(this, endpointURI);
-    } catch (Exception e) {
+    } catch (DeploymentException | IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -83,11 +93,6 @@ public class WebsocketClientEndpoint {
     this.userSession.getAsyncRemote().sendText(message);
   }
 
-  /**
-   * Message handler.
-   *
-   * @author Jiji_Sasidharan
-   */
   public static interface MessageHandler {
 
     public void handleMessage(String message);
