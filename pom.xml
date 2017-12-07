@@ -20,6 +20,36 @@
       <groupId>com.wavesplatform</groupId>
       <artifactId>wavesj</artifactId>
       <version>0.1</version>
+      <!-- Needed for websockets-->
+      <groupId>org.glassfish.tyrus</groupId>
+      <artifactId>tyrus-client</artifactId>
+      <version>1.13.1</version>
+    </dependency>
+    <dependency>
+      <!-- Needed for websockets-->
+      <groupId>org.glassfish.tyrus</groupId>
+      <artifactId>tyrus-container-grizzly-client</artifactId>
+      <version>1.13.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.5</version>
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
