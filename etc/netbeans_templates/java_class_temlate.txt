@@ -1,0 +1,22 @@
+/*
+ * Copyright (c) ${date?date?string("yyyy")} Hochschule Ruhr West (HRW), Bottrop, Germany
+ *
+ *           - ALL RIGHTS RESERVED -
+ *
+ * project:  ${project.name}
+ *
+ * file:     ${nameAndExt} 
+ *
+ * created:  ${date}
+ *
+ * author:   KS, AS
+ */
+
+<#if package?? && package != "">
+package ${package};
+
+</#if>
+public class ${name} {
+
+}
+
