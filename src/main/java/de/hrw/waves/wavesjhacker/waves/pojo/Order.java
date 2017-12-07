@@ -13,19 +13,24 @@
  */
 package de.hrw.waves.wavesjhacker.waves.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wavesplatform.wavesj.PrivateKeyAccount;
+import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import java.nio.ByteBuffer;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
 public class Order implements Signable {
 
+  @JsonProperty("senderPublicKey")
   private String senderKey;
+
+  @JsonProperty("matcherPublicKey")
   private String matcherKey;
-  private boolean useAsset;
-  private String asset;
-  private boolean usePriceAsset;
-  private String priceAsset;
+
+  private AssetPair assetPair;
+
   private OrderType orderType;
   private long price;
   private long amount;
@@ -34,22 +39,28 @@ public class Order implements Signable {
   private long matcherFee;
   private String signature;
 
+  //todo order should hold the account. public key is memer and here private key is needed
+  public void updateSignature(PrivateKeyAccount account) {
+    signature = Signature.sign(account, getDataToSign());
+  }
+
   @Override
+  @JsonIgnore
   public ByteBuffer getDataToSign() {
     ByteBuffer buffer = ByteBuffer.allocate(getBufferSize());
     buffer.put(senderKey.getBytes());
     buffer.put(matcherKey.getBytes());
-    
-    buffer.put(convertAssetFlagToByte(useAsset));
-    if (useAsset) {
-      buffer.put(asset.getBytes());
+
+    buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
+    if (assetPair.useAmountAsset()) {
+      buffer.put(assetPair.getAmountAsset().getBytes());
     }
-    
-    buffer.put(convertAssetFlagToByte(usePriceAsset));
-    if (usePriceAsset) {
-      buffer.put(priceAsset.getBytes());
+
+    buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
+    if (assetPair.usePriceAsset()) {
+      buffer.put(assetPair.getPriceAsset().getBytes());
     }
-    
+
     buffer.put(orderType.getType());
     buffer.putLong(price);
     buffer.putLong(amount);
@@ -62,10 +73,10 @@ public class Order implements Signable {
 
   private int getBufferSize() {
     int bufferSize = 99;
-    if (useAsset) {
+    if (assetPair.useAmountAsset()) {
       bufferSize += 32;
     }
-    if (usePriceAsset) {
+    if (assetPair.usePriceAsset()) {
       bufferSize += 32;
     }
 

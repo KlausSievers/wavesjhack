@@ -13,17 +13,22 @@
  */
 package de.hrw.waves.wavesjhacker.waves.pojo.transactions;
 
-import com.wavesplatform.wavesj.Base58;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.pojo.Signable;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
-import java.nio.ByteBuffer;
 import lombok.Data;
 
 @Data
-public abstract class Transaction implements Signable{
+public abstract class Transaction implements Signable {
 
+  @JsonIgnore
   private TransactionType transactionType;
+
+  @JsonProperty("senderPublicKey")
+  private byte[] senderKey;
+
   private long timestamp;
   private String signature;
 
@@ -31,7 +36,8 @@ public abstract class Transaction implements Signable{
     this.transactionType = type;
   }
 
-  public void  updateSignature(PrivateKeyAccount account) {
+  public void updateSignature(PrivateKeyAccount account) {
+    senderKey = account.getPublicKey();
     signature = Signature.sign(account, getDataToSign());
   }
 }
