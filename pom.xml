@@ -15,11 +15,23 @@
       <groupId>javax.websocket</groupId>
       <artifactId>javax.websocket-client-api</artifactId>
       <version>1.0</version>
-	</dependency>
-	<dependency>
+    </dependency>
+    <dependency>
       <groupId>com.wavesplatform</groupId>
       <artifactId>wavesj</artifactId>
       <version>0.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>projectlombok.org</id>
+      <url>http://projectlombok.org/mavenrepo</url>
+    </repository>
+  </repositories>
 </project>
