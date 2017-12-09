@@ -21,6 +21,9 @@ public class AssetPair {
   private String amountAsset;
   private String priceAsset;
 
+  public AssetPair() {
+  }
+
   public AssetPair(String amountAsset, String priceAsset) {
     this.amountAsset = amountAsset;
     this.priceAsset = priceAsset;

@@ -11,10 +11,9 @@
  *
  * author:   KS, AS
  */
-package de.hrw.waves.wavesjhacker.waves.pojo;
+package de.hrw.waves.wavesjhacker.websocket.pojo.transaction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,7 +21,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(of = {"type", "id", "sender", "senderPublicKey", "signature"})
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction {
 
   private int type;

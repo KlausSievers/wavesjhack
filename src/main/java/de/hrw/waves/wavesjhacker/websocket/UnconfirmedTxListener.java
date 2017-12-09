@@ -15,7 +15,7 @@ package de.hrw.waves.wavesjhacker.websocket;
 
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsDataMessage;
 
-public interface UTXListener {
+public interface UnconfirmedTxListener {
 
   void onUtx(WavesWsDataMessage message);
 }
