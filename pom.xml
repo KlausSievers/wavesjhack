@@ -20,6 +20,8 @@
       <groupId>com.wavesplatform</groupId>
       <artifactId>wavesj</artifactId>
       <version>0.1</version>
+    </dependency>
+    <dependency>
       <!-- Needed for websockets-->
       <groupId>org.glassfish.tyrus</groupId>
       <artifactId>tyrus-client</artifactId>
@@ -47,9 +49,9 @@
       <version>1.7.5</version>
     </dependency>
     <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.0.13</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.13</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

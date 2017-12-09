@@ -13,7 +13,6 @@
  */
 package de.hrw.waves.wavesjhacker;
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import com.wavesplatform.wavesj.Account;
@@ -36,14 +35,16 @@ public class Application {
 
   private static long HOUR = 3_600_000;
 
-  public static void main(String[] args) {
-	URI uri = new URI("ws://ws.wavesplatform.com/api");
-	URI uri = new URI("ws://ws.wavesplatform.com/api");
+  public static void main(String[] args) throws URISyntaxException {
+    
+    URI uri = new URI("ws://ws.wavesplatform.com/api");
     final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(uri, new WavesMessageHandler());
     clientEndPoint.sendMessage(WavesWsMessage.SUBSCRIBE_UTX);
-	  
-    PrivateKeyAccount klaus = new PrivateKeyAccount("evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
-    PrivateKeyAccount andree = new PrivateKeyAccount("pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
+
+    PrivateKeyAccount klaus = new PrivateKeyAccount(
+            "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
+    PrivateKeyAccount andree = new PrivateKeyAccount(
+            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
 
     Date now = new Date();
 
