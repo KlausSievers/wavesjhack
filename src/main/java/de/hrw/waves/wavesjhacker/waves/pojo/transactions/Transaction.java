@@ -33,7 +33,9 @@ public abstract class Transaction implements Signable {
   private byte[] senderKey;
 
   private long timestamp = System.currentTimeMillis();
-  private String signature;
+  
+  @JsonSerialize(using = BytesSerializer.class)
+  private byte[] signature;
 
   public Transaction(TransactionType type) {
     this.transactionType = type;

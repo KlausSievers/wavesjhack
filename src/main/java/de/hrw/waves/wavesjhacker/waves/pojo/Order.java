@@ -42,7 +42,9 @@ public class Order implements Signable {
   private long timestamp;
   private long expiration;
   private long matcherFee;
-  private String signature;
+  
+  @JsonSerialize(using = BytesSerializer.class)
+  private byte[] signature;
 
   //todo order should hold the account. public key is memer and here private key is needed
   public void updateSignature(PrivateKeyAccount account) {
@@ -74,6 +76,16 @@ public class Order implements Signable {
     buffer.putLong(matcherFee);
 
     return buffer;
+  }
+
+  @JsonIgnore
+  public ByteBuffer toByteBuffer() {
+    ByteBuffer toSign = getDataToSign();
+    ByteBuffer result = ByteBuffer.allocate(toSign.limit() + 64);
+    result.put(toSign.array());
+    result.put(signature);
+
+    return result;
   }
 
   private int getBufferSize() {

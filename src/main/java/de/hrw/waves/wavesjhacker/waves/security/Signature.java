@@ -22,11 +22,11 @@ public class Signature {
 
   private static final Curve25519 cipher = Curve25519.getInstance(Curve25519.BEST);
 
-  public static String sign(PrivateKeyAccount account, ByteBuffer buffer) {
+  public static byte[] sign(PrivateKeyAccount account, ByteBuffer buffer) {
     byte[] bytesToSign = new byte[buffer.position()];
     buffer.position(0);
     buffer.get(bytesToSign);
     byte[] signature = cipher.calculateSignature(account.getPrivateKey(), bytesToSign);
-    return Base58.encode(signature);
+    return signature;
   }
 }

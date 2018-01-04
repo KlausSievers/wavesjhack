@@ -52,15 +52,15 @@ public class ExchangeTranscation extends Transaction {
   @Override
   @JsonIgnore
   public ByteBuffer getDataToSign() {
-    byte[] buyOrderData = buyOrder.getDataToSign().array();
-    byte[] sellOrderData = sellOrder.getDataToSign().array();
+    byte[] buyOrderData = buyOrder.toByteBuffer().array();
+    byte[] sellOrderData = sellOrder.toByteBuffer().array();
 
     ByteBuffer buffer = ByteBuffer.allocate(getBufferSize(buyOrderData, sellOrderData));
     buffer.put(getTransactionType().getType());
     buffer.putInt(buyOrderData.length);
     buffer.putInt(sellOrderData.length);
-    buffer.put(buyOrder.getDataToSign());
-    buffer.put(sellOrder.getDataToSign());
+    buffer.put(buyOrderData);
+    buffer.put(sellOrderData);
     buffer.putLong(price);
     buffer.putLong(amount);
     buffer.putLong(getBuyMatcherFee());
