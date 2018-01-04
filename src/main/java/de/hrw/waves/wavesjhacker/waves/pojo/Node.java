@@ -72,7 +72,9 @@ public class Node {
   private HttpResponse exec(HttpUriRequest request) throws IOException {
     HttpResponse r = client.execute(request);
     if (r.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-      String error = parseResponse(r, "message", String.class);
+      Map<String, Object> responseMap = parseResponse(r, new ObjectMapper());
+      String error = responseMap.get("message").toString();
+      error += "\n" + responseMap.get("validationErrors").toString();
       throw new IOException(error);
     }
     return r;
