@@ -15,6 +15,7 @@ package de.hrw.waves.wavesjhacker.waves.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wavesplatform.wavesj.Base58;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import java.nio.ByteBuffer;
@@ -24,10 +25,10 @@ import lombok.Data;
 public class Order implements Signable {
 
   @JsonProperty("senderPublicKey")
-  private String senderKey;
+  private byte[] senderKey;
 
   @JsonProperty("matcherPublicKey")
-  private String matcherKey;
+  private byte[] matcherKey;
 
   private AssetPair assetPair;
 
@@ -48,8 +49,8 @@ public class Order implements Signable {
   @JsonIgnore
   public ByteBuffer getDataToSign() {
     ByteBuffer buffer = ByteBuffer.allocate(getBufferSize());
-    buffer.put(senderKey.getBytes());
-    buffer.put(matcherKey.getBytes());
+    buffer.put(senderKey);
+    buffer.put(matcherKey);
 
     buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
     if (assetPair.useAmountAsset()) {
@@ -72,7 +73,7 @@ public class Order implements Signable {
   }
 
   private int getBufferSize() {
-    int bufferSize = 99;
+    int bufferSize = 108;
     if (assetPair.useAmountAsset()) {
       bufferSize += 32;
     }
