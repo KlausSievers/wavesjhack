@@ -1,10 +1,17 @@
 
 import com.wavesplatform.wavesj.Base58;
+import com.wavesplatform.wavesj.Order;
+import com.wavesplatform.wavesj.PrivateKeyAccount;
+import com.wavesplatform.wavesj.Transaction;
 import de.hrw.waves.wavesjhacker.waves.pojo.AssetPair;
-import de.hrw.waves.wavesjhacker.waves.pojo.Order;
 import de.hrw.waves.wavesjhacker.waves.pojo.OrderType;
-
-
+import de.hrw.waves.wavesjhacker.waves.security.Signature;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.Assert;
+import org.junit.Test;
 
 /*
  * Copyright (c) 2018 Hochschule Ruhr West (HRW), Bottrop, Germany
@@ -19,39 +26,78 @@ import de.hrw.waves.wavesjhacker.waves.pojo.OrderType;
  *
  * author:   KS, AS
  */
-
 public class TestSignature {
 
-  public void testOrderSignature() {
-   
+  private static final int MIN_BUFFER_SIZE = 120;
 
-//             "    \"order1\" : {\n"
-//            + "      \"id\" : \"282N9Vkx4TdNWg7hcnGbAYNwEBFXFQZqK7J4pw71tiCU\",\n"
-//            + "      \"senderPublicKey\" : \"BLBZ6ror7Nma9LeMkeuY39ufQmgGXrxWt3WLmmefJUnK\",\n"
-//            + "      \"matcherPublicKey\" : \"7kPFrHDiGw1rCm7LPszuECwWYL3dMf6iMifLRDJQZMzy\",\n"
-//            + "      \"assetPair\" : {\n"
-//            + "        \"amountAsset\" : null,\n"
-//            + "        \"priceAsset\" : \"8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS\"\n"
-//            + "      },\n"
-//            + "      \"orderType\" : \"buy\",\n"
-//            + "      \"price\" : 57189,\n"
-//            + "      \"amount\" : 29230000000,\n"
-//            + "      \"timestamp\" : 1512651598140,\n"
-//            + "      \"expiration\" : 1514379598140,\n"
-//            + "      \"matcherFee\" : 300000,\n"
-//            + "      \"signature\" : \"4iBjAdtQRfWogjcisbfqHWc99majHaeH4Pm1gL3wM8kjeSNYHeo1fMTCkfQjLpBGpNN5Xdv87TPcEVunkXhGuHYm\"\n"
-//            + "    }";
-    Order order = new Order();
+  @Test
+  public void testOrderSignature() {
+    long timestamp = 1512651598140L;
+    long expiration = 1514379598140L;
+    long matcherFee = 300000;
+    long amount = 29230000000L;
+    long price = 57189;
+    String assetPrice = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS";
+    String matcherKey = "7kPFrHDiGw1rCm7LPszuECwWYL3dMf6iMifLRDJQZMzy";
+    PrivateKeyAccount klaus = new PrivateKeyAccount(
+            "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
+    de.hrw.waves.wavesjhacker.waves.pojo.Order order = new de.hrw.waves.wavesjhacker.waves.pojo.Order();
     order.setOrderType(OrderType.BUY);
-    order.setAmount(29230000000L);
-    order.setPrice(57189);
-    order.setMatcherFee(1);
-    order.setSenderKey(Base58.decode("BLBZ6ror7Nma9LeMkeuY39ufQmgGXrxWt3WLmmefJUnK"));
-    order.setMatcherFee(1);
-    order.setMatcherKey(Base58.decode("7kPFrHDiGw1rCm7LPszuECwWYL3dMf6iMifLRDJQZMzy")); 
-    order.setExpiration(1514379598140L);
-    order.setTimestamp(1512651598140L);
-    order.setAssetPair(new AssetPair(null, "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"));
-   // order.updateSignature(klaus);
+    order.setAmount(amount);
+    order.setPrice(price);
+    order.setMatcherFee(matcherFee);
+    order.setSenderKey(klaus.getPublicKey());
+    order.setMatcherKey(Base58.decode(matcherKey));
+    order.setExpiration(expiration);
+    order.setTimestamp(timestamp);
+    order.setAssetPair(new AssetPair(null, assetPrice));
+    ByteBuffer toSign = order.getDataToSign();
+    
+
+    ByteBuffer expectedToSign = makeOrderTx(klaus, matcherKey, Order.Type.BUY, 
+            null, assetPrice, price, amount, expiration, timestamp, matcherFee);
+    
+    order.updateSignature(klaus);
+    //System.out.println(Arrays.toString(expectedToSign.array()));
+    //System.out.println(Arrays.toString(toSign.array()));
+    
+    Assert.assertArrayEquals(expectedToSign.array(), toSign.array());
+    
+    byte[] expectedSign = Signature.sign(klaus, expectedToSign);
+    //System.out.println(Arrays.toString(expectedSign));
+    //System.out.println(Arrays.toString(order.getSignature()));
+    Assert.assertArrayEquals(expectedSign, order.getSignature());
+  }
+
+  public static ByteBuffer makeOrderTx(PrivateKeyAccount sender, String matcherKey, Order.Type orderType,
+          String amountAssetId, String priceAssetId, long price, long amount, long expiration, long timestamp, long matcherFee) {
+    int datalen = MIN_BUFFER_SIZE
+            + (amountAssetId == null ? 0 : 32)
+            + (priceAssetId == null ? 0 : 32);
+    if (datalen == MIN_BUFFER_SIZE) {
+      throw new IllegalArgumentException("Both spendAsset and receiveAsset are WAVES");
+    }
+    ByteBuffer buf = ByteBuffer.allocate(datalen);
+    buf.put(sender.getPublicKey()).put(Base58.decode(matcherKey));
+    putAsset(buf, amountAssetId);
+    putAsset(buf, priceAssetId);
+    buf.put((byte) orderType.ordinal()).putLong(price).putLong(amount)
+            .putLong(timestamp).putLong(expiration).putLong(matcherFee);
+    return buf;
+  }
+
+  private static void putAsset(ByteBuffer buffer, String assetId) {
+    if (assetId == null || assetId.isEmpty()) {
+      buffer.put((byte) 0);
+    } else {
+      buffer.put((byte) 1).put(Base58.decode(assetId));
+    }
+  }
+
+  private static Map<String, String> assetPair(String amountAssetId, String priceAssetId) {
+    Map<String, String> assetPair = new HashMap<>();
+    assetPair.put("amountAsset", amountAssetId);
+    assetPair.put("priceAsset", priceAssetId);
+    return assetPair;
   }
 }

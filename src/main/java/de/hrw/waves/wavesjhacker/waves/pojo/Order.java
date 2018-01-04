@@ -42,7 +42,6 @@ public class Order implements Signable {
   private long timestamp;
   private long expiration;
   private long matcherFee;
-  
   @JsonSerialize(using = BytesSerializer.class)
   private byte[] signature;
 
@@ -63,7 +62,7 @@ public class Order implements Signable {
       buffer.put(Base58.decode(assetPair.getAmountAsset()));
     }
 
-    buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
+    buffer.put(convertAssetFlagToByte(assetPair.usePriceAsset()));
     if (assetPair.usePriceAsset()) {
       buffer.put(Base58.decode(assetPair.getPriceAsset()));
     }
@@ -89,7 +88,7 @@ public class Order implements Signable {
   }
 
   private int getBufferSize() {
-    int bufferSize = 108;
+    int bufferSize = 120;
     if (assetPair.useAmountAsset()) {
       bufferSize += 32;
     }

@@ -69,7 +69,6 @@ public class Application {
     order.setPrice(1);
     order.setMatcherFee(1);
     order.setSenderKey(klaus.getPublicKey());
-    order.setMatcherFee(1);
     order.setMatcherKey(matcher.getPublicKey()); 
     order.setExpiration(now.getTime() + HOUR);
     order.setTimestamp(now.getTime());
@@ -82,7 +81,6 @@ public class Application {
     order2.setPrice(1);
     order2.setMatcherFee(1);
     order2.setSenderKey(andree.getPublicKey());
-    order2.setMatcherFee(1);
     order2.setMatcherKey(matcher.getPublicKey()); 
     order2.setExpiration(now.getTime() + HOUR);
     order2.setTimestamp(now.getTime());
