@@ -15,7 +15,7 @@ package de.hrw.waves.wavesjhacker.websocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.hrw.waves.wavesjhacker.waves.pojo.Transaction;
+import de.hrw.waves.wavesjhacker.websocket.pojo.transaction.Transaction;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsDataMessage;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsMessage;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class WavesMessageHandler implements MessageHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WavesMessageHandler.class);
   private final ObjectMapper mapper = new ObjectMapper();
-  private final List<UTXListener> utxListener = new LinkedList<>();
+  private final List<UnconfirmedTxListener> utxListener = new LinkedList<>();
 
   @Override
   public void handleMessage(String message) {
@@ -40,7 +40,7 @@ public class WavesMessageHandler implements MessageHandler {
     }
   }
 
-  public void addUtxListener(UTXListener listener) {
+  public void addUtxListener(UnconfirmedTxListener listener) {
     utxListener.add(listener);
   }
 

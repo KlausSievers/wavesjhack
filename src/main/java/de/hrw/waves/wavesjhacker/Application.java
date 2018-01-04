@@ -13,7 +13,6 @@
  */
 package de.hrw.waves.wavesjhacker;
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import com.wavesplatform.wavesj.Account;
@@ -24,6 +23,7 @@ import de.hrw.waves.wavesjhacker.waves.pojo.Order;
 import de.hrw.waves.wavesjhacker.waves.pojo.OrderType;
 import de.hrw.waves.wavesjhacker.waves.pojo.transactions.ExchangeTranscation;
 import de.hrw.waves.wavesjhacker.waves.pojo.transactions.Transaction;
+import de.hrw.waves.wavesjhacker.websocket.UnconfirmedExchangeTxListener;
 import de.hrw.waves.wavesjhacker.websocket.WavesMessageHandler;
 import de.hrw.waves.wavesjhacker.websocket.WebsocketClientEndpoint;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsMessage;
@@ -37,14 +37,27 @@ public class Application {
   private static long HOUR = 3_600_000;
 
   public static void main(String[] args) throws URISyntaxException {
-//	URI uri = new URI("ws://ws.wavesplatform.com/api");
-//    final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(uri, new WavesMessageHandler());
-//    clientEndPoint.sendMessage(WavesWsMessage.SUBSCRIBE_UTX);
-//	  
-    PrivateKeyAccount klaus = new PrivateKeyAccount("evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
-    PrivateKeyAccount andree = new PrivateKeyAccount("pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
-    PrivateKeyAccount matcher = new PrivateKeyAccount("hollow roast install broom vacant ancient choice toe busy pupil item defy fluid vague system", 0, '0');
+    initWsConnection();
+
+    sendTestExchangeTx();
+  }
+
+  private static void initWsConnection() throws URISyntaxException {
+    URI uri = new URI("ws://ws.wavesplatform.com/api");
+    WavesMessageHandler wavesMessageHandler = new WavesMessageHandler();
+    wavesMessageHandler.addUtxListener(new UnconfirmedExchangeTxListener());
     
+    final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(uri, wavesMessageHandler);
+    clientEndPoint.sendMessage(WavesWsMessage.SUBSCRIBE_UTX);
+  }
+
+  private static void sendTestExchangeTx() {
+    PrivateKeyAccount klaus = new PrivateKeyAccount(
+            "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
+    PrivateKeyAccount andree = new PrivateKeyAccount(
+            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
+    PrivateKeyAccount matcher = new PrivateKeyAccount(
+            "hollow roast install broom vacant ancient choice toe busy pupil item defy fluid vague system", 0, '0');
 
     Date now = new Date();
 
