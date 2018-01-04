@@ -30,8 +30,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 /**
- * Copied by
- * https://github.com/wavesplatform/WavesJ/blob/master/src/main/java/com/wavesplatform/wavesj/Node.java
+ * Copied by https://github.com/wavesplatform/WavesJ/blob/master/src/main/java/com/wavesplatform/wavesj/Node.java
  *
  * only the required part and adjusted to own transaction class
  *
@@ -61,7 +60,7 @@ public class Node {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     String jsonTx = mapper.writeValueAsString(tx);
-    System.out.println(jsonTx); 
+    System.out.println(jsonTx);
 
     request.setEntity(new StringEntity(jsonTx));
     request.setHeader("Content-Type", "application/json");
@@ -74,7 +73,9 @@ public class Node {
     if (r.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
       Map<String, Object> responseMap = parseResponse(r, new ObjectMapper());
       String error = responseMap.get("message").toString();
-      error += "\n" + responseMap.get("validationErrors").toString();
+      if (responseMap.get("validationErrors") != null) {
+        error += "\n" + responseMap.get("validationErrors").toString();
+      }
       throw new IOException(error);
     }
     return r;

@@ -13,6 +13,7 @@
  */
 package de.hrw.waves.wavesjhacker;
 
+import com.wavesplatform.wavesj.Base58;
 import java.net.URI;
 import java.net.URISyntaxException;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
@@ -27,17 +28,19 @@ import de.hrw.waves.wavesjhacker.websocket.WavesMessageHandler;
 import de.hrw.waves.wavesjhacker.websocket.WebsocketClientEndpoint;
 import de.hrw.waves.wavesjhacker.websocket.pojo.WavesWsMessage;
 import java.io.IOException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Application {
 
-  private static long HOUR = 3_600_000;
+  private static long HOUR = 24 * 3_600_000 * 10;
   
   public static void main(String[] args) throws URISyntaxException {
 //    initWsConnection();
-
+    System.out.println("Decode: " + String.valueOf(Base58.decode("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS")));
     sendTestExchangeTx();
   }
 
@@ -70,7 +73,7 @@ public class Application {
     order.setMatcherKey(matcher.getPublicKey()); 
     order.setExpiration(now.getTime() + HOUR);
     order.setTimestamp(now.getTime());
-    order.setAssetPair(new AssetPair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", null));
+    order.setAssetPair(new AssetPair(null, "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"));
     order.updateSignature(klaus);
 
     Order order2 = new Order();
@@ -83,10 +86,10 @@ public class Application {
     order2.setMatcherKey(matcher.getPublicKey()); 
     order2.setExpiration(now.getTime() + HOUR);
     order2.setTimestamp(now.getTime());
-    order2.setAssetPair(new AssetPair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", null));
+    order2.setAssetPair(new AssetPair(null, "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"));
     order2.updateSignature(andree);
 
-    Transaction testTx = new ExchangeTranscation(order, order2, 100000000, 1, 1);
+    Transaction testTx = new ExchangeTranscation(order, order2, 1, 100000000, 300000);
     testTx.updateSignature(matcher);
 
     Node node = new Node();

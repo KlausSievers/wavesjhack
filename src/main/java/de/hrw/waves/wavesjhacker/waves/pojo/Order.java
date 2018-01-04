@@ -16,6 +16,7 @@ package de.hrw.waves.wavesjhacker.waves.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.wavesplatform.wavesj.Base58;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.BytesSerializer;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
@@ -57,12 +58,12 @@ public class Order implements Signable {
 
     buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
     if (assetPair.useAmountAsset()) {
-      buffer.put(assetPair.getAmountAsset().getBytes());
+      buffer.put(Base58.decode(assetPair.getAmountAsset()));
     }
 
     buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
     if (assetPair.usePriceAsset()) {
-      buffer.put(assetPair.getPriceAsset().getBytes());
+      buffer.put(Base58.decode(assetPair.getPriceAsset()));
     }
 
     buffer.put(orderType.getType());
