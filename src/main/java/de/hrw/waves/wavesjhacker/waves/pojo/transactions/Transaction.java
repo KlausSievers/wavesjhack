@@ -15,7 +15,9 @@ package de.hrw.waves.wavesjhacker.waves.pojo.transactions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
+import de.hrw.waves.wavesjhacker.waves.BytesSerializer;
 import de.hrw.waves.wavesjhacker.waves.pojo.Signable;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import lombok.Data;
@@ -27,6 +29,7 @@ public abstract class Transaction implements Signable {
   private TransactionType transactionType;
 
   @JsonProperty("senderPublicKey")
+  @JsonSerialize(using = BytesSerializer.class)
   private byte[] senderKey;
 
   private long timestamp;

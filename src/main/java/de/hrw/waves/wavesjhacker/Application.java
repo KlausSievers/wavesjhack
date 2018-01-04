@@ -15,7 +15,6 @@ package de.hrw.waves.wavesjhacker;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import com.wavesplatform.wavesj.Account;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.pojo.AssetPair;
 import de.hrw.waves.wavesjhacker.waves.pojo.Node;
@@ -35,9 +34,9 @@ import java.util.logging.Logger;
 public class Application {
 
   private static long HOUR = 3_600_000;
-
+  
   public static void main(String[] args) throws URISyntaxException {
-    initWsConnection();
+//    initWsConnection();
 
     sendTestExchangeTx();
   }
@@ -52,18 +51,18 @@ public class Application {
   }
 
   private static void sendTestExchangeTx() {
+    PrivateKeyAccount matcher = new PrivateKeyAccount(
+            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
     PrivateKeyAccount klaus = new PrivateKeyAccount(
             "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
     PrivateKeyAccount andree = new PrivateKeyAccount(
             "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
-    PrivateKeyAccount matcher = new PrivateKeyAccount(
-            "hollow roast install broom vacant ancient choice toe busy pupil item defy fluid vague system", 0, '0');
 
     Date now = new Date();
 
     Order order = new Order();
     order.setOrderType(OrderType.BUY);
-    order.setAmount(1);
+    order.setAmount(100000000);
     order.setPrice(1);
     order.setMatcherFee(1);
     order.setSenderKey(klaus.getPublicKey());
@@ -71,12 +70,12 @@ public class Application {
     order.setMatcherKey(matcher.getPublicKey()); 
     order.setExpiration(now.getTime() + HOUR);
     order.setTimestamp(now.getTime());
-    order.setAssetPair(new AssetPair("", ""));
+    order.setAssetPair(new AssetPair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", null));
     order.updateSignature(klaus);
 
     Order order2 = new Order();
-    order2.setOrderType(OrderType.BUY);
-    order2.setAmount(1);
+    order2.setOrderType(OrderType.SELL);
+    order2.setAmount(100000000);
     order2.setPrice(1);
     order2.setMatcherFee(1);
     order2.setSenderKey(andree.getPublicKey());
@@ -84,10 +83,10 @@ public class Application {
     order2.setMatcherKey(matcher.getPublicKey()); 
     order2.setExpiration(now.getTime() + HOUR);
     order2.setTimestamp(now.getTime());
-    order2.setAssetPair(new AssetPair("", ""));
+    order2.setAssetPair(new AssetPair("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS", null));
     order2.updateSignature(andree);
 
-    Transaction testTx = new ExchangeTranscation(order, order2, 1, 1, 1);
+    Transaction testTx = new ExchangeTranscation(order, order2, 100000000, 1, 1);
     testTx.updateSignature(matcher);
 
     Node node = new Node();

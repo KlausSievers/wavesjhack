@@ -15,8 +15,9 @@ package de.hrw.waves.wavesjhacker.waves.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wavesplatform.wavesj.Base58;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
+import de.hrw.waves.wavesjhacker.waves.BytesSerializer;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import java.nio.ByteBuffer;
 import lombok.Data;
@@ -25,9 +26,11 @@ import lombok.Data;
 public class Order implements Signable {
 
   @JsonProperty("senderPublicKey")
+  @JsonSerialize(using = BytesSerializer.class)
   private byte[] senderKey;
 
   @JsonProperty("matcherPublicKey")
+  @JsonSerialize(using = BytesSerializer.class)
   private byte[] matcherKey;
 
   private AssetPair assetPair;

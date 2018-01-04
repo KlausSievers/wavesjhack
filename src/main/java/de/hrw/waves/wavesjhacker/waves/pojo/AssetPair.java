@@ -30,10 +30,10 @@ public class AssetPair {
   }
 
   public boolean useAmountAsset() {
-    return amountAsset.length() > 0;
+    return amountAsset != null && amountAsset.length() > 0;
   }
 
   public boolean usePriceAsset() {
-    return priceAsset.length() > 0;
+    return priceAsset != null && priceAsset.length() > 0;
   }
 }
