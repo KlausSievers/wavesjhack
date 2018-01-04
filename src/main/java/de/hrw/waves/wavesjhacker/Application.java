@@ -36,14 +36,15 @@ public class Application {
 
   private static long HOUR = 3_600_000;
 
-  public static void main(String[] args) {
-	URI uri = new URI("ws://ws.wavesplatform.com/api");
-	URI uri = new URI("ws://ws.wavesplatform.com/api");
-    final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(uri, new WavesMessageHandler());
-    clientEndPoint.sendMessage(WavesWsMessage.SUBSCRIBE_UTX);
-	  
+  public static void main(String[] args) throws URISyntaxException {
+//	URI uri = new URI("ws://ws.wavesplatform.com/api");
+//    final WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(uri, new WavesMessageHandler());
+//    clientEndPoint.sendMessage(WavesWsMessage.SUBSCRIBE_UTX);
+//	  
     PrivateKeyAccount klaus = new PrivateKeyAccount("evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
     PrivateKeyAccount andree = new PrivateKeyAccount("pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
+    PrivateKeyAccount matcher = new PrivateKeyAccount("hollow roast install broom vacant ancient choice toe busy pupil item defy fluid vague system", 0, '0');
+    
 
     Date now = new Date();
 
@@ -52,9 +53,9 @@ public class Application {
     order.setAmount(1);
     order.setPrice(1);
     order.setMatcherFee(1);
-    order.setSenderKey(klaus.getAddress());
+    order.setSenderKey(klaus.getPublicKey());
     order.setMatcherFee(1);
-    order.setMatcherKey("12345"); //???
+    order.setMatcherKey(matcher.getPublicKey()); 
     order.setExpiration(now.getTime() + HOUR);
     order.setTimestamp(now.getTime());
     order.setAssetPair(new AssetPair("", ""));
@@ -65,23 +66,23 @@ public class Application {
     order2.setAmount(1);
     order2.setPrice(1);
     order2.setMatcherFee(1);
-    order2.setSenderKey(andree.getAddress());
+    order2.setSenderKey(andree.getPublicKey());
     order2.setMatcherFee(1);
-    order2.setMatcherKey("12345"); //???
+    order2.setMatcherKey(matcher.getPublicKey()); 
     order2.setExpiration(now.getTime() + HOUR);
     order2.setTimestamp(now.getTime());
     order2.setAssetPair(new AssetPair("", ""));
     order2.updateSignature(andree);
 
     Transaction testTx = new ExchangeTranscation(order, order2, 1, 1, 1);
-    testTx.updateSignature(klaus);
+    testTx.updateSignature(matcher);
 
     Node node = new Node();
     try {
       String response = node.send(testTx);
       Logger.getLogger(Application.class.getName()).log(Level.WARNING, response);
     } catch (IOException ex) {
-      Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(Application.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
     }
   }
 }
