@@ -20,7 +20,7 @@ import org.whispersystems.curve25519.Curve25519;
 
 public class Signature {
 
-  private static final Curve25519 cipher = Curve25519.getInstance(Curve25519.BEST);
+  public static final Curve25519 cipher = Curve25519.getInstance(Curve25519.BEST);
 /**
  * From WavesJ because it was private!
  * static String sign(PrivateKeyAccount account, ByteBuffer buffer) {

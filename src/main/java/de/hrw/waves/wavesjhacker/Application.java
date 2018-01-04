@@ -23,6 +23,7 @@ import de.hrw.waves.wavesjhacker.waves.pojo.Order;
 import de.hrw.waves.wavesjhacker.waves.pojo.OrderType;
 import de.hrw.waves.wavesjhacker.waves.pojo.transactions.ExchangeTranscation;
 import de.hrw.waves.wavesjhacker.waves.pojo.transactions.Transaction;
+import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import de.hrw.waves.wavesjhacker.websocket.UnconfirmedExchangeTxListener;
 import de.hrw.waves.wavesjhacker.websocket.WavesMessageHandler;
 import de.hrw.waves.wavesjhacker.websocket.WebsocketClientEndpoint;
@@ -40,6 +41,8 @@ public class Application {
   
   public static void main(String[] args) throws URISyntaxException {
 //    initWsConnection();
+ byte[] bytes = Base58.decode("WA1QuEjJX2b6w1xKGaqyFZwPDN9DMiAoTYVfe2TUyd7UUTmqmTkswJmCWfZJEDANAnPfjENZJqE6HN1t5MVLTWU");
+    System.out.println(bytes.length);
     System.out.println("Decode: " + String.valueOf(Base58.decode("8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS")));
     sendTestExchangeTx();
   }
@@ -89,13 +92,16 @@ public class Application {
 
     Transaction testTx = new ExchangeTranscation(order, order2, 1, 100000000, 300000);
     testTx.updateSignature(matcher);
+    
+    boolean b = Signature.cipher.verifySignature(matcher.getPublicKey(), testTx.getDataToSign().array(), testTx.getSignature());
+    System.out.println("OUR FUCKING TEST" + b);
 
-    Node node = new Node();
-    try {
-      String response = node.send(testTx);
-      Logger.getLogger(Application.class.getName()).log(Level.WARNING, response);
-    } catch (IOException ex) {
-      Logger.getLogger(Application.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-    }
+//    Node node = new Node();
+//    try {
+//      String response = node.send(testTx);
+//      Logger.getLogger(Application.class.getName()).log(Level.WARNING, response);
+//    } catch (IOException ex) {
+//      Logger.getLogger(Application.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+//    }
   }
 }
