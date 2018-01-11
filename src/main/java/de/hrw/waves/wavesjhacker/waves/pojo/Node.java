@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
@@ -30,7 +31,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 /**
- * Copied by https://github.com/wavesplatform/WavesJ/blob/master/src/main/java/com/wavesplatform/wavesj/Node.java
+ * Copied by
+ * https://github.com/wavesplatform/WavesJ/blob/master/src/main/java/com/wavesplatform/wavesj/Node.java
  *
  * only the required part and adjusted to own transaction class
  *
@@ -42,13 +44,17 @@ public class Node {
 
   private final URI uri;
 
-  public Node() {
+  public Node(String uri) {
     try {
-      this.uri = new URI(DEFAULT_NODE);
+      this.uri = new URI(uri);
     } catch (URISyntaxException e) {
       // should not happen
       throw new RuntimeException(e);
     }
+  }
+  
+  public Node() {
+    this(DEFAULT_NODE);
   }
 
   public String send(Transaction tx) throws IOException {
