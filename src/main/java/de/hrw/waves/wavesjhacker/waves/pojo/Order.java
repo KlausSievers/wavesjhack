@@ -59,12 +59,12 @@ public class Order implements Signable {
 
     buffer.put(convertAssetFlagToByte(assetPair.useAmountAsset()));
     if (assetPair.useAmountAsset()) {
-      buffer.put(Base58.decode(assetPair.getAmountAsset()));
+      buffer.put(Base58.decode(assetPair.getAmountAsset().getAssetId()));
     }
 
     buffer.put(convertAssetFlagToByte(assetPair.usePriceAsset()));
     if (assetPair.usePriceAsset()) {
-      buffer.put(Base58.decode(assetPair.getPriceAsset()));
+      buffer.put(Base58.decode(assetPair.getPriceAsset().getAssetId()));
     }
 
     buffer.put(orderType.getType());

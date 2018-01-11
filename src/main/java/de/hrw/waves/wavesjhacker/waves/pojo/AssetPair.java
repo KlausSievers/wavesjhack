@@ -18,22 +18,31 @@ import lombok.Data;
 @Data
 public class AssetPair {
 
-  private String amountAsset;
-  private String priceAsset;
+  private Asset amountAsset;
+  private Asset priceAsset;
 
   public AssetPair() {
   }
 
-  public AssetPair(String amountAsset, String priceAsset) {
+  public AssetPair(Asset amountAsset, Asset priceAsset) {
     this.amountAsset = amountAsset;
     this.priceAsset = priceAsset;
   }
 
   public boolean useAmountAsset() {
-    return amountAsset != null && amountAsset.length() > 0;
+    return amountAsset != Asset.WAVES;
   }
 
   public boolean usePriceAsset() {
-    return priceAsset != null && priceAsset.length() > 0;
+    return priceAsset != Asset.WAVES;
   }
+
+  public Asset getAmountAsset() {
+    return amountAsset;
+  }
+
+  public Asset getPriceAsset() {
+    return priceAsset;
+  }
+  
 }

@@ -17,6 +17,7 @@ import com.wavesplatform.wavesj.Base58;
 import java.net.URI;
 import java.net.URISyntaxException;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
+import de.hrw.waves.wavesjhacker.waves.pojo.Asset;
 import de.hrw.waves.wavesjhacker.waves.pojo.AssetPair;
 import de.hrw.waves.wavesjhacker.waves.pojo.Node;
 import de.hrw.waves.wavesjhacker.waves.pojo.Order;
@@ -75,7 +76,7 @@ public class Application {
     order.setMatcherKey(matcher.getPublicKey()); 
     order.setExpiration(now.getTime() + HOUR);
     order.setTimestamp(now.getTime());
-    order.setAssetPair(new AssetPair(null, "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"));
+    order.setAssetPair(new AssetPair(Asset.WAVES, Asset.BTC));
     order.updateSignature(klaus);
 
     Order order2 = new Order();
@@ -87,7 +88,7 @@ public class Application {
     order2.setMatcherKey(matcher.getPublicKey()); 
     order2.setExpiration(now.getTime() + HOUR);
     order2.setTimestamp(now.getTime());
-    order2.setAssetPair(new AssetPair(null, "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS"));
+    order2.setAssetPair(new AssetPair(Asset.WAVES, Asset.BTC));
     order2.updateSignature(andree);
 
     Transaction testTx = new ExchangeTranscation(order, order2, 1, 100000000, 300000);

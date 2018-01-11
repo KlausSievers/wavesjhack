@@ -3,6 +3,7 @@ import com.wavesplatform.wavesj.Base58;
 import com.wavesplatform.wavesj.Order;
 import com.wavesplatform.wavesj.PrivateKeyAccount;
 import com.wavesplatform.wavesj.Transaction;
+import de.hrw.waves.wavesjhacker.waves.pojo.Asset;
 import de.hrw.waves.wavesjhacker.waves.pojo.AssetPair;
 import de.hrw.waves.wavesjhacker.waves.pojo.OrderType;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
@@ -37,7 +38,7 @@ public class TestSignature {
     long matcherFee = 300000;
     long amount = 29230000000L;
     long price = 57189;
-    String assetPrice = "8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS";
+    Asset assetPrice = Asset.BTC;
     String matcherKey = "7kPFrHDiGw1rCm7LPszuECwWYL3dMf6iMifLRDJQZMzy";
     PrivateKeyAccount klaus = new PrivateKeyAccount(
             "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
@@ -50,12 +51,12 @@ public class TestSignature {
     order.setMatcherKey(Base58.decode(matcherKey));
     order.setExpiration(expiration);
     order.setTimestamp(timestamp);
-    order.setAssetPair(new AssetPair(null, assetPrice));
+    order.setAssetPair(new AssetPair(Asset.WAVES, assetPrice));
     ByteBuffer toSign = order.getDataToSign();
     
 
     ByteBuffer expectedToSign = makeOrderTx(klaus, matcherKey, Order.Type.BUY, 
-            null, assetPrice, price, amount, expiration, timestamp, matcherFee);
+            null, assetPrice.getAssetId(), price, amount, expiration, timestamp, matcherFee);
     
     order.updateSignature(klaus);
     //System.out.println(Arrays.toString(expectedToSign.array()));
@@ -63,7 +64,7 @@ public class TestSignature {
     
     Assert.assertArrayEquals(expectedToSign.array(), toSign.array());
     
-    byte[] expectedSign = Signature.sign(klaus, expectedToSign);
+    //byte[] expectedSign = Signature.sign(klaus, expectedToSign);
     //System.out.println(Arrays.toString(expectedSign));
     //System.out.println(Arrays.toString(order.getSignature()));
 //    Assert.assertArrayEquals(expectedSign, order.getSignature());
