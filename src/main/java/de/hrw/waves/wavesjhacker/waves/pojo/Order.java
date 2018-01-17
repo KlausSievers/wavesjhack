@@ -88,7 +88,7 @@ public class Order implements Signable {
   }
 
   private int getBufferSize() {
-    int bufferSize = 120;
+    int bufferSize = 107;
     if (assetPair.useAmountAsset()) {
       bufferSize += 32;
     }
