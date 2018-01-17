@@ -13,6 +13,7 @@
  */
 package de.hrw.waves.wavesjhacker;
 
+import com.wavesplatform.wavesj.Account;
 import com.wavesplatform.wavesj.Base58;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,12 +59,12 @@ public class Application {
   }
 
   private static void sendTestExchangeTx() {
-    PrivateKeyAccount matcher = new PrivateKeyAccount(
-            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
-    PrivateKeyAccount klaus = new PrivateKeyAccount(
-            "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, '0');
-    PrivateKeyAccount andree = new PrivateKeyAccount(
-            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, '0');
+    PrivateKeyAccount matcher =PrivateKeyAccount.fromSeed(
+            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, Account.TESTNET);
+    PrivateKeyAccount klaus = PrivateKeyAccount.fromSeed(
+            "evidence unit market inject swamp quote just know control equal file avoid metal scout video", 0, Account.TESTNET);
+    PrivateKeyAccount andree = PrivateKeyAccount.fromSeed(
+            "pistol assist festival craft library force orphan amateur bullet scissors abstract among leisure hamster model", 0, Account.TESTNET);
 
     Date now = new Date();
 
