@@ -20,9 +20,7 @@ import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.BytesSerializer;
 import de.hrw.waves.wavesjhacker.waves.pojo.Signable;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
-import lombok.Data;
 
-@Data
 public abstract class Transaction implements Signable {
 
   @JsonIgnore
@@ -44,4 +42,38 @@ public abstract class Transaction implements Signable {
     senderKey = account.getPublicKey();
     signature = Signature.sign(account, getDataToSign());
   }
+
+  public TransactionType getTransactionType() {
+    return transactionType;
+  }
+
+  public void setTransactionType(TransactionType transactionType) {
+    this.transactionType = transactionType;
+  }
+
+  public byte[] getSenderKey() {
+    return senderKey;
+  }
+
+  public void setSenderKey(byte[] senderKey) {
+    this.senderKey = senderKey;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public byte[] getSignature() {
+    return signature;
+  }
+
+  public void setSignature(byte[] signature) {
+    this.signature = signature;
+  }
+  
+  
 }

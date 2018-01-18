@@ -13,9 +13,6 @@
  */
 package de.hrw.waves.wavesjhacker.waves.pojo;
 
-import lombok.Data;
-
-@Data
 public class AssetPair {
 
   private Asset amountAsset;

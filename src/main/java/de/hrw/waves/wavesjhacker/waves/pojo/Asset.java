@@ -5,6 +5,8 @@
  */
 package de.hrw.waves.wavesjhacker.waves.pojo;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  *
  * @author Klaus
@@ -32,9 +34,16 @@ public enum Asset {
     return name;
   }
 
+  @JsonValue
   public String getAssetId() {
     return assetId;
   }
+
+  @Override
+  public String toString() {
+    return this.getSymbol();
+  }
+  
   
   
 

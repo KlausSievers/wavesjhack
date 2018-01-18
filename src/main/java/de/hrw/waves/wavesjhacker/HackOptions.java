@@ -13,9 +13,7 @@
  */
 package de.hrw.waves.wavesjhacker;
 
-import lombok.Data;
 
-@Data
 public class HackOptions {
 
   private final String assetId;
@@ -32,5 +30,19 @@ public class HackOptions {
     this.matcherPrivateKey = matcherPrivateKey;
     this.myPrivateKey = myPrivateKey;
   }
+
+  public String getAssetId() {
+    return assetId;
+  }
+
+  public String getMatcherPrivateKey() {
+    return matcherPrivateKey;
+  }
+
+  public String getMyPrivateKey() {
+    return myPrivateKey;
+  }
+  
+  
 
 }

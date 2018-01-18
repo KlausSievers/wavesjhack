@@ -14,9 +14,7 @@
 package de.hrw.waves.wavesjhacker.websocket.pojo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Data;
 
-@Data
 public class WavesWsMessage {
 
   public enum Type {
@@ -47,4 +45,14 @@ public class WavesWsMessage {
   }
 
   private Type op;
+
+  public Type getOp() {
+    return op;
+  }
+
+  public void setOp(Type op) {
+    this.op = op;
+  }
+  
+  
 }

@@ -21,9 +21,7 @@ import com.wavesplatform.wavesj.PrivateKeyAccount;
 import de.hrw.waves.wavesjhacker.waves.BytesSerializer;
 import de.hrw.waves.wavesjhacker.waves.security.Signature;
 import java.nio.ByteBuffer;
-import lombok.Data;
 
-@Data
 public class Order implements Signable {
 
   @JsonProperty("senderPublicKey")
@@ -102,5 +100,87 @@ public class Order implements Signable {
   private byte convertAssetFlagToByte(boolean assetFlag) {
     return (byte) (assetFlag ? 1 : 0);
   }
+
+  public byte[] getSenderKey() {
+    return senderKey;
+  }
+
+  public void setSenderKey(byte[] senderKey) {
+    this.senderKey = senderKey;
+  }
+
+  public byte[] getMatcherKey() {
+    return matcherKey;
+  }
+
+  public void setMatcherKey(byte[] matcherKey) {
+    this.matcherKey = matcherKey;
+  }
+
+  public AssetPair getAssetPair() {
+    return assetPair;
+  }
+
+  public void setAssetPair(AssetPair assetPair) {
+    this.assetPair = assetPair;
+  }
+
+  public OrderType getOrderType() {
+    return orderType;
+  }
+
+  public void setOrderType(OrderType orderType) {
+    this.orderType = orderType;
+  }
+
+  public long getPrice() {
+    return price;
+  }
+
+  public void setPrice(long price) {
+    this.price = price;
+  }
+
+  public long getAmount() {
+    return amount;
+  }
+
+  public void setAmount(long amount) {
+    this.amount = amount;
+  }
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public long getExpiration() {
+    return expiration;
+  }
+
+  public void setExpiration(long expiration) {
+    this.expiration = expiration;
+  }
+
+  public long getMatcherFee() {
+    return matcherFee;
+  }
+
+  public void setMatcherFee(long matcherFee) {
+    this.matcherFee = matcherFee;
+  }
+
+  public byte[] getSignature() {
+    return signature;
+  }
+
+  public void setSignature(byte[] signature) {
+    this.signature = signature;
+  }
+  
+  
 
 }

@@ -17,9 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.hrw.waves.wavesjhacker.waves.pojo.Order;
 import java.nio.ByteBuffer;
-import lombok.Data;
 
-@Data
 public class ExchangeTranscation extends Transaction {
 
   @JsonProperty("order1")
@@ -77,4 +75,44 @@ public class ExchangeTranscation extends Transaction {
     return bufferSize;
   }
 
+  public Order getBuyOrder() {
+    return buyOrder;
+  }
+
+  public void setBuyOrder(Order buyOrder) {
+    this.buyOrder = buyOrder;
+  }
+
+  public Order getSellOrder() {
+    return sellOrder;
+  }
+
+  public void setSellOrder(Order sellOrder) {
+    this.sellOrder = sellOrder;
+  }
+
+  public long getPrice() {
+    return price;
+  }
+
+  public void setPrice(long price) {
+    this.price = price;
+  }
+
+  public long getAmount() {
+    return amount;
+  }
+
+  public void setAmount(long amount) {
+    this.amount = amount;
+  }
+
+  public long getFee() {
+    return fee;
+  }
+
+  public void setFee(long fee) {
+    this.fee = fee;
+  }
+  
 }
